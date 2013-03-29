@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Net.Http;
+using System.Web.Http;
 
 namespace WebApi.SelfHost
 {
@@ -15,9 +16,29 @@ namespace WebApi.SelfHost
 			}
 		}
 
-		public byte[] Get()
+		public HttpResponseMessage Get()
 		{
-			return buffer;
+			HttpResponseMessage response = Request.CreateResponse();
+
+			response.Content = new PushStreamContent((outputStream, httpContent, transportContext) =>
+			{
+				try
+				{
+					int size = buffer.Length / 16;
+					var wrote = 0;
+					for (int i = 0; i < 16; i++)
+					{
+						outputStream.Write(buffer, wrote, size);
+						wrote += size;
+					}
+				}
+				finally
+				{
+					outputStream.Close();
+				}
+			});
+
+			return response;
 		}
 	}
 }

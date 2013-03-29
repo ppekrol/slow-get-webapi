@@ -15,7 +15,7 @@
     <AssemblyName>WebApi.Web</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -122,6 +122,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\WebApi.SelfHost\Test2Controller.cs">
+      <Link>Controllers\Test2Controller.cs</Link>
+    </Compile>
     <Compile Include="..\WebApi.SelfHost\TestController.cs">
       <Link>Controllers\TestController.cs</Link>
     </Compile>
@@ -169,7 +172,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52472</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:8098/</IISUrl>
+          <IISUrl>http://localhost/WebApi.Web</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -9,22 +9,24 @@ namespace Client
 	{
 		public static void Main(string[] args)
 		{
-			//PerformGets("http://localhost:8099"); // self-host
-			PerformGets("http://localhost:8098"); // iis express
+			//PerformGetsUsingWebRequest("http://localhost:8099"); // self-host
+			PerformGetsUsingWebRequest("http://localhost/WebApi.Web"); // iis
+
+			//PerformGetsUsingHttpClient("http://localhost:8099"); // self-host
+			//PerformGetsUsingHttpClient("http://localhost/WebApi.Web"); // iis
+
+			//PerformGetsUsingHttpClientAlt("http://localhost:8099"); // self-host
+			//PerformGetsUsingHttpClientAlt("http://localhost/WebApi.Web"); // iis
 		}
 
-		private static void PerformGets(string url)
+		private static void PerformGetsUsingWebRequest(string url)
 		{
-			var client = new HttpClient();
 			var buffer = new byte[4 * 1024];
 
 			for (var i = 0; i < 100; i++)
 			{
-				var watch = Stopwatch.StartNew();
-				//var task = client.GetByteArrayAsync(url + "/api/test/");
-				//task.Wait();
-
 				var webRequest = WebRequest.Create(url + "/api/test/");
+				var watch = Stopwatch.StartNew();
 				using (var response = webRequest.GetResponse())
 				using (var stream = response.GetResponseStream())
 				{
@@ -34,7 +36,36 @@ namespace Client
 				}
 
 				watch.Stop();
+				Console.WriteLine("{0,-3}: {1}", i, watch.ElapsedMilliseconds);
+			}
+		}
 
+		private static void PerformGetsUsingHttpClient(string url)
+		{
+			var client = new HttpClient();
+
+			for (var i = 0; i < 100; i++)
+			{
+				var watch = Stopwatch.StartNew();
+				var task = client.GetByteArrayAsync(url + "/api/test/");
+				task.Wait();
+
+				watch.Stop();
+				Console.WriteLine("{0,-3}: {1}", i, watch.ElapsedMilliseconds);
+			}
+		}
+
+		private static void PerformGetsUsingHttpClientAlt(string url)
+		{
+			for (var i = 0; i < 100; i++)
+			{
+				var client = new HttpClient();
+
+				var watch = Stopwatch.StartNew();
+				var task = client.GetByteArrayAsync(url + "/api/test/");
+				task.Wait();
+
+				watch.Stop();
 				Console.WriteLine("{0,-3}: {1}", i, watch.ElapsedMilliseconds);
 			}
 		}
